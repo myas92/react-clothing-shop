@@ -2,12 +2,13 @@ import React from 'react';
 import CustomButtom from '../custom-button/custom-button.component';
 import FormInput from '../form-input/form-input.component';
 
+// import { SignInWithGoogle } from '../../firebase/firebase.utils';
 import { SignInWithGoogle } from '../../firebase/firebase.utils';
 
 import './sign-in.styles.scss';
 
 class SignIn extends React.Component {
-    constructor(props) {
+    constructor(props) { 
         super(props);
 
         this.state = {
@@ -29,7 +30,7 @@ class SignIn extends React.Component {
 
     render() {
         return (
-            <div className="sign-up">
+            <div className="sign-in">
                 <h1>I already have an account</h1>
                 <span>Sign in with your email</span>
                 <form onSubmit={this.handleSubmit}>

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 import './App.css';
 import Header from './components/header/header.component';
 import Auth from './pages/auth/auth.component';
@@ -8,31 +9,39 @@ import ShopPage from './pages/shop/shop.component';
 // import { auth } from './firebase/firebase.utils';
 // import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
-class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      currentUser: null
-    }
 
-  }
+import { setCurrentUser } from './redux/user/user.actions';
+
+class App extends React.Component {
+  // constructor() {
+  //   super();
+  //   this.state = {
+  //     currentUser: null
+  //   }
+
+  // }
   unsubscribeFormAuth = null;
 
   componentDidMount() {
+    const { setCurrentUser } = this.props;
     this.unsubscribeFormAuth = auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
-        userRef.onSnapshot(async snapShot => {
-          await this.setState({
-            currentUser: {
-              id: snapShot.id,
-              ...snapShot.data()
-            }
+        userRef.onSnapshot(snapShot => {
+          setCurrentUser({
+            id: snapShot.id,
+            ...snapShot.data()
           })
+          // await this.setState({
+          //   currentUser: {
+          //     id: snapShot.id,
+          //     ...snapShot.data()
+          //   }
+          // })
         })
 
       }
-      await this.setState({ currentUser: userAuth })
+      setCurrentUser(userAuth)
     })
   }
 
@@ -43,11 +52,17 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <Header currentUser={this.state.currentUser} />
+
+        {/* وقتی از ریداکس استفاده میشه دیگخ نیاز نیست استیت هارو به عنوان پراپس پاس بدیم بره پایین با کاکنک میشه به اون استید دسترسی داشت 
+        <Header currentUser={this.state.currentUser} /> */}
+        <Header />
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route exact path="/shop" component={ShopPage} />
-          <Route exact path="/sign-in" component={Auth} />
+          <Route exact path="/sign-in" render={
+            ()=> this.props.currentUser ? (<Redirect to="/" />)
+            :(<Auth/>)
+          }/>
         </Switch>
       </div>
     );
@@ -55,4 +70,12 @@ class App extends React.Component {
 
 }
 
-export default App;
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser
+})
+
+const mapDispatchToProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

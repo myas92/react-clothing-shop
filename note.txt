@@ -1,0 +1,2 @@
+for using localstorge : redux-persist module
+npm i redux-persist

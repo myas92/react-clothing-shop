@@ -7,17 +7,19 @@ import storage from 'redux-persist/lib/storage';// localStorege on windows brows
 import userReducer from './user/user.reducer';
 import cartReducer from './cart/cart.reducer';
 import directoryReducer from './directory/directory.reducer';
+import shopReducer from './shop/shop.reducer';
 
-const persistConfig ={
-    key : 'root',
+const persistConfig = {
+    key: 'root',
     storage,
-    whitelist: ['cart'] 
+    whitelist: ['cart']
 }
 
 const rootReducer = combineReducers({
     user: userReducer,
     cart: cartReducer,
-    directory : directoryReducer
+    directory: directoryReducer,
+    shop: shopReducer
 })
 
 export default persistReducer(persistConfig, rootReducer)

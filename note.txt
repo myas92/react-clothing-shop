@@ -4,3 +4,6 @@ npm i redux-persist
 2: Route hase "match" : {path , params}
 path == shop/:categoryId ---> params == params.categoryId
 
+--------------------------------------------------------------
+3: for payments use stripe
+npm i react-stripe-checkout

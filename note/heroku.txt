@@ -1,0 +1,4 @@
+1: download and install heroku
+https://devcenter.heroku.com/articles/heroku-cli
+sudo snap install --classic heroku
+-----------------------------------------------------------
